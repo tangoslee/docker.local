@@ -1,6 +1,6 @@
 version: "3"
 services:
-  php-fpm:
+  php:
     image: ubuntu:focal
     deploy:
       resources:
@@ -14,7 +14,32 @@ services:
         home: ${HOME}
       context: ./php
       dockerfile: ./Dockerfile
-    container_name: workspace
+    container_name: php
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ${APP_DIR}:/var/www
+      - ${TMP_DIR}:/tmp
+      - ${HOME}:${HOME}/
+      - ./.bashrc_docker:${HOME}/.bashrc_docker
+    networks:
+      - intranet
+
+  php8:
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          #memory: 512m
+          #cpus: 1
+    build:
+      args:
+        user: ${USER}
+        uid: ${UID}
+        home: ${HOME}
+      context: ./php8
+      dockerfile: ./Dockerfile
+    container_name: php8
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
