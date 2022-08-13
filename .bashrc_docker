@@ -1,0 +1,2 @@
+[ -f ~/.bashrc ] && . ~/.bashrc
+PS1=$(printf "docker>$PS1")
