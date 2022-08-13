@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://opensource.com/article/19/9/linux-terminal-colors
 
-CONTAINER=workspace
+CONTAINER=php
 
 [ "$1" != "" ] && CONTAINER=$1
 
