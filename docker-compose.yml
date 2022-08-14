@@ -1,7 +1,6 @@
 version: "3"
 services:
   php:
-    image: ubuntu:focal
     deploy:
       resources:
         limits:
@@ -95,13 +94,12 @@ services:
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
     volumes:
       - ${APP_DIR}:/var/www
       - ${LOG_DIR}:/var/log/nginx
       - ./nginx/etc:/etc/nginx/conf.d/
-    #command: [nginx-debug, '-g', 'daemon off;']
     networks:
       - intranet
 
@@ -116,7 +114,7 @@ services:
     container_name: redis
     command: --port ${REDIS_PORT}
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - intranet
 
@@ -133,7 +131,7 @@ services:
     #command: ./meilisearch --master-key=${MEILISEARCH_KEY} --no-analytics
     command: ./meilisearch --no-analytics --http-payload-size-limit=500Mb
     ports:
-      - "${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
+      - "127.0.0.1:${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
     volumes:
       - ${MEILISEARCH_DATA}:/data.ms
     networks:
@@ -142,7 +140,3 @@ services:
 networks:
   intranet:
     driver: bridge
-#Volumes
-volumes:
-  dbdata:
-    driver: local
