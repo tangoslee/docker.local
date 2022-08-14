@@ -13,11 +13,6 @@ DBNAME="$1"
 
 echo "Create database $DBNAME"
 
-CMD="mysql -h db.local -u root mysql"
-TMP=.user.sql
-
-[ -f "$TMP" ] && rm -f "$TMP"
-
 HOST="%"
 USER=$(grep DB_USERNAME $config | cut -d'=' -f2)
 PASS=$(grep DB_PASSWORD $config | cut -d'=' -f2)
@@ -26,6 +21,11 @@ PASS=$(grep DB_PASSWORD $config | cut -d'=' -f2)
   echo "Invalid format:  user or password"
   exit
 }
+
+CMD="mysql -h db.local -u root -p$PASS mysql"
+TMP=.user.sql
+
+[ -f "$TMP" ] && rm -f "$TMP"
 
 cat<<EOL > $TMP
 CREATE DATABASE IF NOT EXISTS $DBNAME;
