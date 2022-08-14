@@ -70,7 +70,7 @@ services:
       #SERVICE_TAGS: dev
       #SERVICE_NAME: mysql
     ports:
-      - ${DB_PORT}:3306
+      - 127.0.0.1:${DB_PORT}:3306
     volumes:
       # file
       - ${DB_CONF_DIR}/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
