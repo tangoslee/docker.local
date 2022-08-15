@@ -56,7 +56,7 @@ services:
         limits:
           memory: 4096m
           #cpus: 2
-    hostname: db.local
+    hostname: db.localhost
     container_name: mysql
     restart: unless-stopped
     environment:
