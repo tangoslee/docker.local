@@ -1,3 +1,0 @@
-# create domain
-sangmin.local
-tendopay.local

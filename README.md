@@ -1,47 +1,6 @@
 # How to build local environment
 
-## Local wild card domain
 
-Work as root
-
-### Set *.local to 127.0.0.1
-
-```
-echo 'address=/.local/127.0.0.1' > /etc/NetworkManager/dnsmasq.d/local-wildcard.conf
-```
-
-#### Add 'dns=dnsmasq' to /etc/NetworkManager/NetworkManager.conf
-
-```
-[main]
-plugins=ifupdown,keyfile
-dns=dnsmasq
-
-[ifupdown]
-managed=false
-
-[device]
-wifi.scan-rand-mac-address=no
-```
-
-#### Replace /etc/resolve.conf
-```bash
-mv /etc/resolve.conf /etc/resolv.conf.dist
-ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
-```
-
-#### Reload NetworkManager
-
-```
-systemctl reload NetworkManager
-```
-
-#### Test
-
-```
-dig test.local +short
-127.0.0.1
-```
 
 #### /etc/nsswitch.conf
 
