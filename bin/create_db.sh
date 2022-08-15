@@ -22,7 +22,7 @@ PASS=$(grep DB_PASSWORD $config | cut -d'=' -f2)
   exit
 }
 
-CMD="mysql -h db.local -u root -p$PASS mysql"
+CMD="mysql -h db.localhost -u root -p$PASS mysql"
 TMP=.user.sql
 
 [ -f "$TMP" ] && rm -f "$TMP"
