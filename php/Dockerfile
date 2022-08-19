@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     telnet \
     tree \
+    wget \
     vim
 
 # Set memory_limit

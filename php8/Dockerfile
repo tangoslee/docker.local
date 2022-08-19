@@ -20,10 +20,10 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     telnet \
     tree \
+    wget \
     vim
 
 # Set memory_limit
-#RUN echo "php_admin_value[memory_limit] = 2G" >> /usr/local/etc/php-fpm.d/www.conf
 COPY etc/php.ini /usr/local/etc/php/conf.d/php.override.ini
 
 # Install PHP extensions
