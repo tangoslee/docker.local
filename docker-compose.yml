@@ -4,7 +4,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 3G
           #memory: 512m
           #cpus: 1
     build:
@@ -29,7 +29,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 3G
           #memory: 512m
           #cpus: 1
     build:
