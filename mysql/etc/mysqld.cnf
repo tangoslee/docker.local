@@ -36,6 +36,7 @@ datadir		= /var/lib/mysql
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links = 1
 secure_file_priv = "/var/lib/mysql-files/"
+#secure_file_priv = ""
 #skip-networking = 1
 
 # https://stackoverflow.com/questions/59391611/how-to-improve-performance-of-mysql-dump-restore#:~:text=Summary%20(for%20best%20dump%20restore,should%20be%20enabled%20on%20production.
