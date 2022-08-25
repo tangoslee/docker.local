@@ -1,28 +1,32 @@
 #!/bin/bash
 # https://dev.mysql.com/doc/refman/8.0/en/creating-accounts.html
-__DIR__=$(dirname $(readlink -f $0))
+CWD=$(dirname $(readlink -f "$0"))
+ENV=${CWD}/../.env
 
-config=$__DIR__/../.env
+[ -f "$ENV" ] && {
+. "$ENV"
+}
 
 DBNAME="$1"
 
 [ "$DBNAME" = "" ] && {
-  echo "usage: `basename $0` dbname"
+  echo "usage: $(basename "$0") dbname"
   exit 1
 }
+#export MYSQL_PWD="$DB_PASSWORD"
 
 echo "Create database $DBNAME"
 
 HOST="%"
-USER=$(grep DB_USERNAME $config | cut -d'=' -f2)
-PASS=$(grep DB_PASSWORD $config | cut -d'=' -f2)
+USER=${DB_USERNAME}
+PASS=${DB_PASSWORD}
 
 [ "$USER" = "" -o "$PASS" = "" ] && {
   echo "Invalid format:  user or password"
   exit
 }
 
-CMD="mysql -h db.localhost -u root -p$PASS mysql"
+CMD="mysql -h db.localhost -u root mysql"
 TMP=.user.sql
 
 [ -f "$TMP" ] && rm -f "$TMP"
@@ -35,8 +39,10 @@ FLUSH PRIVILEGES;
 EOL
 
 {
-  $CMD < "$TMP" 
+  $CMD < "$TMP"
 } && {
   [ -f "$TMP" ] && rm -f "$TMP"
+} && {
+  echo "$DBNAME has been successfully created"
 }
 
