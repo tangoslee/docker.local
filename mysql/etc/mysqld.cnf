@@ -43,3 +43,8 @@ secure_file_priv = "/var/lib/mysql-files/"
 #innodb_buffer_pool_size	= 268435456
 innodb_buffer_pool_size	= 2G
 innodb_log_file_size = 1G
+
+# https://dev.mysql.com/doc/refman/8.0/en/stored-programs-logging.html#:~:text=By%20default%2C%20this%20variable%20has,enabled%2C%20log_bin_trust_function_creators%20does%20not%20apply.
+binlog_format = MIXED
+# https://stackoverflow.com/questions/1404107/permissions-for-creating-a-trigger-in-mysql
+log_bin_trust_function_creators = ON
