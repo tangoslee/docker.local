@@ -58,6 +58,7 @@ services:
     hostname: db.localhost
     container_name: mysql
     restart: unless-stopped
+    user: ${USER_UID}:999
     environment:
       MYSQL_ROOT_HOST: "%"
       #MYSQL_DATABASE: ${DB_DATABASE}
@@ -76,7 +77,7 @@ services:
       - intranet
     command: --explicit_defaults_for_timestamp=ON
              --character-set-server=utf8mb4
-             --collation-server=utf8mb4_general_ci
+             --collation-server=utf8mb4_0900_ai_ci
 
   nginx:
     image: nginx:alpine

@@ -29,10 +29,6 @@ SECURE_DIR=$($CMD mysql -N -e "SHOW VARIABLES LIKE 'secure_file_priv';" | awk '{
 } && {
   echo "Dump Started to ${DB_DUMP_DIR}"
   $CMD mysqldump "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --order-by-primary
-} && [ "${USER_UID}" != "" ] && {
-  echo "Adjust Permissions"
-  $CMD chown -R "${USER_UID}".mysql "$SECURE_DIR"
-  $CMD find "$SECURE_DIR" -type f -exec chmod 660 {} \;
 } && {
   echo "The job has been successfully done!"
 }
