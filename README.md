@@ -87,8 +87,9 @@ mkdir -p $HOME/workspace/www/tendopay.localhost/public
 ### Download
 ```shell
 cd workspace
-wget https://github.com/tangoslee/docker.local/archive/refs/tags/v0.1.0.tar.gz -O docler.local.tgz
-tar xvfz docker.local.tgz
+https://github.com/tangoslee/docker.local/archive/refs/tags/v0.1.1.tar.gz
+tar xvfz v0.1.1.tar.gz
+mv docker.local-0.1.1 docker.local
 cd docker.local
 ```
 ### Configuration
