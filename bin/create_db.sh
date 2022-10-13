@@ -1,6 +1,19 @@
 #!/bin/bash
 # https://dev.mysql.com/doc/refman/8.0/en/creating-accounts.html
-CWD=$(dirname $(readlink -f "$0"))
+
+uname -a | grep Darwin > /dev/null
+if [ $? -eq 0 ]; then
+  #Mac
+  [ -f /usr/local/bin/grealpath ] || {
+    echo "grealpath not found"
+    echo "brew install coreutils"
+    exit 1;
+  }
+  CWD=$(dirname $(grealpath "$0"))
+else
+  #Ubuntu
+  CWD=$(dirname $(readlink -f "$0"))
+fi
 ENV=${CWD}/../.env
 
 [ -f "$ENV" ] && {
