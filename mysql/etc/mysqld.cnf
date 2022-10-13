@@ -35,10 +35,32 @@ datadir		= /var/lib/mysql
 #bind-address	= 127.0.0.1
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links = 1
+local_infile = 1
 secure_file_priv = "/var/lib/mysql-files/"
+#secure_file_priv = ""
 #skip-networking = 1
+disable_log_bin = 1
+skip_log_bin = 1
+#host_cache_size = 0
 
 # https://stackoverflow.com/questions/59391611/how-to-improve-performance-of-mysql-dump-restore#:~:text=Summary%20(for%20best%20dump%20restore,should%20be%20enabled%20on%20production.
 #innodb_buffer_pool_size	= 268435456
 innodb_buffer_pool_size	= 2G
-innodb_log_file_size = 1G
+#innodb_log_file_size = 1G
+innodb_redo_log_capacity = 1G
+
+# https://dev.mysql.com/doc/refman/8.0/en/stored-programs-logging.html#:~:text=By%20default%2C%20this%20variable%20has,enabled%2C%20log_bin_trust_function_creators%20does%20not%20apply.
+#binlog_format = MIXED
+# https://stackoverflow.com/questions/1404107/permissions-for-creating-a-trigger-in-mysql
+log_bin_trust_function_creators = ON
+
+sql_mode = ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+#sort_buffer_size = 262144
+#innodb_sort_buffer_size = 1048576
+sort_buffer_size = 4M
+innodb_sort_buffer_size = 10M
+
+#innodb_max_undo_log_size = 1073741824
+
+#innodb-force-recovery=1

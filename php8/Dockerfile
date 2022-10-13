@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libxslt-dev \
     procps \
     zip \
     unzip \
@@ -23,12 +24,11 @@ RUN apt-get update && apt-get install -y \
     vim
 
 # Set memory_limit
-#RUN echo "php_admin_value[memory_limit] = 2G" >> /usr/local/etc/php-fpm.d/www.conf
 COPY etc/php.ini /usr/local/etc/php/conf.d/php.override.ini
 
 # Install PHP extensions
 RUN apt-get update && \
-    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip soap intl
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip soap intl xsl
 
 # install xdebug
 RUN pecl install xdebug

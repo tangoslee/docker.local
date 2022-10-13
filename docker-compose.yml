@@ -1,40 +1,64 @@
 version: "3"
 services:
-  php-fpm:
-    image: ubuntu:focal
+  php:
     deploy:
       resources:
         limits:
-          memory: 512m
+          memory: ${PHP_MEMORY_LIMITS}
           #cpus: 1
     build:
       args:
         user: ${USER}
-        uid: ${UID}
-        home: ${HOME}
+        uid: ${USER_UID}
+        home: ${CONTAINER_HOME}
       context: ./php
       dockerfile: ./Dockerfile
-    container_name: workspace
+    container_name: php
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ${APP_DIR}:/var/www
       - ${TMP_DIR}:/tmp
-      - ${HOME}:${HOME}/
-      - ./.bashrc_docker:${HOME}/.bashrc_docker
+      - ${HOME}:${CONTAINER_HOME}/
+      - ./.bashrc_docker:${CONTAINER_HOME}/.bashrc_docker
+    networks:
+      - intranet
+
+  php8:
+    deploy:
+      resources:
+        limits:
+          memory: ${PHP8_MEMORY_LIMITS}
+          #cpus: 1
+    build:
+      args:
+        user: ${USER}
+        uid: ${USER_UID}
+        home: ${CONTAINER_HOME}
+      context: ./php8
+      dockerfile: ./Dockerfile
+    container_name: php8
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ${APP_DIR}:/var/www
+      - ${TMP_DIR}:/tmp
+      - ${HOME}:${CONTAINER_HOME}/
+      - ./.bashrc_docker:${CONTAINER_HOME}/.bashrc_docker
     networks:
       - intranet
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     deploy:
       resources:
         limits:
-          memory: 4096m
+          memory: ${MYSQL_MEMORY_LIMITS}
           #cpus: 2
-    hostname: db.local
+    hostname: db.localhost
     container_name: mysql
     restart: unless-stopped
+    user: ${USER_UID}:999
     environment:
       MYSQL_ROOT_HOST: "%"
       #MYSQL_DATABASE: ${DB_DATABASE}
@@ -42,41 +66,35 @@ services:
       #MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
-      #SERVICE_TAGS: dev
-      #SERVICE_NAME: mysql
     ports:
-      - ${DB_PORT}:3306
+      - 127.0.0.1:${DB_PORT}:3306
     volumes:
-      # file
-      - ${DB_CONF_DIR}/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
-      - ${DB_CONF_DIR}/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
       # directory
+      - ./mysql/etc:/etc/mysql/conf.d
       - ${DATA_DIR}/mysql:/var/lib/mysql
-      - ${DATA_DIR}/mysql-files:/var/lib/mysql-files
-      - ${DATA_DIR}/mysql-files-sample:/var/lib/mysql-files-sample
+      - ${DB_DUMP_DIR}:/var/lib/mysql-files
     networks:
       - intranet
     command: --explicit_defaults_for_timestamp=ON
              --character-set-server=utf8mb4
-             --collation-server=utf8mb4_general_ci
+             --collation-server=utf8mb4_0900_ai_ci
 
   nginx:
     image: nginx:alpine
     deploy:
       resources:
         limits:
-          memory: 128m
+          memory: ${NGIX_MEMORY_LIMITS}
           #cpus: 1
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
     volumes:
       - ${APP_DIR}:/var/www
       - ${LOG_DIR}:/var/log/nginx
       - ./nginx/etc:/etc/nginx/conf.d/
-    #command: [nginx-debug, '-g', 'daemon off;']
     networks:
       - intranet
 
@@ -85,13 +103,13 @@ services:
     deploy:
       resources:
         limits:
-          memory: 64m
+          memory: ${REDIS_MEMORY_LIMITS}
           #cpus: 1
     hostname: redis
     container_name: redis
     command: --port ${REDIS_PORT}
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - intranet
 
@@ -100,15 +118,15 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: ${MEILSEARCH_MEMORY_LIMITS}
     hostname: meilisearch
     container_name: meilisearch
-    user: ${UID}:${UID}
+    user: ${USER_UID}:${USER_UID}
     #restart: unless-stopped
     #command: ./meilisearch --master-key=${MEILISEARCH_KEY} --no-analytics
     command: ./meilisearch --no-analytics --http-payload-size-limit=500Mb
     ports:
-      - "${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
+      - "127.0.0.1:${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
     volumes:
       - ${MEILISEARCH_DATA}:/data.ms
     networks:
@@ -117,7 +135,3 @@ services:
 networks:
   intranet:
     driver: bridge
-#Volumes
-volumes:
-  dbdata:
-    driver: local

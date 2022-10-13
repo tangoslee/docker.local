@@ -1,2 +1,4 @@
 [ -f ~/.bashrc ] && . ~/.bashrc
-PS1=$(printf "docker>$PS1")
+#PS1=$(printf "docker>$PS1")
+export PS1="docker>$PS1"
+export PATH=$HOME/bin:$PATH
