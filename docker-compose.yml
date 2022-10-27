@@ -75,7 +75,8 @@ services:
       - ${DB_DUMP_DIR}:/var/lib/mysql-files
     networks:
       - intranet
-    command: --explicit_defaults_for_timestamp=ON
+    command: --user=mysql
+             --explicit_defaults_for_timestamp=ON
              --character-set-server=utf8mb4
              --collation-server=utf8mb4_0900_ai_ci
 

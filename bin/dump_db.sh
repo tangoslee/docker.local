@@ -28,7 +28,7 @@ SECURE_DIR=$($CMD mysql -N -e "SHOW VARIABLES LIKE 'secure_file_priv';" | awk '{
   find "${DB_DUMP_DIR}" -type f -exec rm -f {} \;
 } && {
   echo "Dump Started to ${DB_DUMP_DIR}"
-  $CMD mysqldump "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --order-by-primary
+  $CMD mysqldump -u root "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --order-by-primary
 } && {
   echo "The job has been successfully done!"
 }
