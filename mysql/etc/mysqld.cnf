@@ -59,7 +59,8 @@ log_bin_trust_function_creators = ON
 
 # 4G for MySQL
 innodb_buffer_pool_size = 2G
-innodb_redo_log_capacity = 128M
+innodb_log_file_size = 128M
+#innodb_redo_log_capacity = 128M
 bulk_insert_buffer_size = 128M
 
 # default
