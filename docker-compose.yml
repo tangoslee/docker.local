@@ -50,6 +50,9 @@ services:
 
   mysql:
     image: mysql:8.0.23
+    # to fix mbind: Operation not permitted
+    cap_add:
+      - SYS_NICE
     deploy:
       resources:
         limits:
