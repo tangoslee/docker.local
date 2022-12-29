@@ -49,7 +49,10 @@ services:
       - intranet
 
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0.23
+    # to fix mbind: Operation not permitted
+    cap_add:
+      - SYS_NICE
     deploy:
       resources:
         limits:
@@ -75,7 +78,8 @@ services:
       - ${DB_DUMP_DIR}:/var/lib/mysql-files
     networks:
       - intranet
-    command: --explicit_defaults_for_timestamp=ON
+    command: --user=mysql
+             --explicit_defaults_for_timestamp=ON
              --character-set-server=utf8mb4
              --collation-server=utf8mb4_0900_ai_ci
 
@@ -110,25 +114,6 @@ services:
     command: --port ${REDIS_PORT}
     ports:
       - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
-    networks:
-      - intranet
-
-  meilisearch:
-    image: getmeili/meilisearch:latest
-    deploy:
-      resources:
-        limits:
-          memory: ${MEILSEARCH_MEMORY_LIMITS}
-    hostname: meilisearch
-    container_name: meilisearch
-    user: ${USER_UID}:${USER_UID}
-    #restart: unless-stopped
-    #command: ./meilisearch --master-key=${MEILISEARCH_KEY} --no-analytics
-    command: ./meilisearch --no-analytics --http-payload-size-limit=500Mb
-    ports:
-      - "127.0.0.1:${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
-    volumes:
-      - ${MEILISEARCH_DATA}:/data.ms
     networks:
       - intranet
 

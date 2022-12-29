@@ -19,7 +19,7 @@ EOL
 exit 1
 }
 
-SECURE_DIR=$($CMD mysql -N -e "SHOW VARIABLES LIKE 'secure_file_priv';" | awk '{ print $2 }')
+SECURE_DIR=$($CMD mysql -u root -N -e "SHOW VARIABLES LIKE 'secure_file_priv';" | awk '{ print $2 }')
 [ "$SECURE_DIR" = "" ] && SECURE_DIR=/var/lib/mysql-files
 
 [ -d "${DB_DUMP_DIR}" ] &&
@@ -28,7 +28,11 @@ SECURE_DIR=$($CMD mysql -N -e "SHOW VARIABLES LIKE 'secure_file_priv';" | awk '{
   find "${DB_DUMP_DIR}" -type f -exec rm -f {} \;
 } && {
   echo "Dump Started to ${DB_DUMP_DIR}"
-  $CMD mysqldump "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --order-by-primary
+  $CMD mysqldump -u root "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --order-by-primary
+  #$CMD mysqlpump -u root "$DATABASE" --tab=$SECURE_DIR --fields-terminated-by=0x1e  --single-transaction --skip-definer
+} && {
+  echo "Remove DEFINER"
+  $CMD find $SECURE_DIR -type f -name "*.sql" -exec perl -pi -E 's/\/\*![0-9]+\sDEFINER=.+\*\///g' {} \;
 } && {
   echo "The job has been successfully done!"
 }
