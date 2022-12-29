@@ -117,49 +117,6 @@ services:
     networks:
       - intranet
 
-  meilisearch:
-    image: getmeili/meilisearch:latest
-    deploy:
-      resources:
-        limits:
-          memory: ${MEILSEARCH_MEMORY_LIMITS}
-    hostname: meilisearch
-    container_name: meilisearch
-    user: ${USER_UID}:${USER_UID}
-    #restart: unless-stopped
-    #command: ./meilisearch --master-key=${MEILISEARCH_KEY} --no-analytics
-    command: ./meilisearch --no-analytics --http-payload-size-limit=500Mb
-    ports:
-      - "127.0.0.1:${MEILISEARCH_PORT}:${MEILISEARCH_PORT}"
-    volumes:
-      - ${MEILISEARCH_DATA}:/data.ms
-    networks:
-      - intranet
-
-  swagger-editor:
-    image: swaggerapi/swagger-editor
-    hostname: swagger-editor
-    container_name: "swagger-editor"
-    ports:
-      - "8081:8080"
-    networks:
-      - intranet
-
-  swagger-ui:
-    image: swaggerapi/swagger-ui
-    hostname: swagger-ui
-    container_name: "swagger-ui"
-    ports:
-      - "127.0.0.1:8082:8080"
-    volumes:
-      #- ./swagger/openapi.json:/openapi.json
-      - ${SWAGGER_ROOT}/openapi.json:/openapi.json
-    environment:
-      SWAGGER_JSON: /openapi.json
-      # API_URL: ""
-    networks:
-      - intranet
-
 networks:
   intranet:
     driver: bridge
