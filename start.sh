@@ -1,11 +1,12 @@
 #!/bin/bash
 
+CFG=$(./config.sh)
 OPT="$1"
 
 uname -a | grep 'Darwin' > /dev/null
 if [ $? -eq 0 ]; then
   # Mac
-  docker-compose up -d $OPT
+  docker-compose $CFG up -d $OPT
 else
   # Ubuntu
   # laradock_elasticsearch_1 exited with code 78
@@ -20,7 +21,7 @@ else
 
   sudo systemctl start docker.socket && {
     sudo systemctl start docker.service
-    docker-compose down
-    docker-compose up -d $OPT
+    docker-compose $CFG down
+    docker-compose $CFG up -d $OPT
   } && sudo systemctl status docker.service
 fi

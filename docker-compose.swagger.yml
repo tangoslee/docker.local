@@ -1,0 +1,25 @@
+version: "3"
+services:
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    hostname: swagger-editor
+    container_name: "swagger-editor"
+    ports:
+      - "8081:8080"
+    networks:
+      - intranet
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    hostname: swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - "127.0.0.1:8082:8080"
+    volumes:
+      #- ./swagger/openapi.json:/openapi.json
+      - ${SWAGGER_ROOT}/openapi.json:/openapi.json
+    environment:
+      SWAGGER_JSON: /openapi.json
+      # API_URL: ""
+    networks:
+      - intranet
