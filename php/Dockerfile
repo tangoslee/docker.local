@@ -31,7 +31,7 @@ RUN apt-get update && \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip soap intl
 
 # install xdebug
-RUN pecl install xdebug
+RUN pecl install xdebug-3.1.5
 RUN docker-php-ext-enable xdebug
 RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
